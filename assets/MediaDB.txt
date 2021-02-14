@@ -1,0 +1,19 @@
+users(user_id, name, email, password, current_storage)
+
+files(file_id, post_id, file, image_lat, image_long, image_date, album_id, file_size)
+
+posts(post_id, user_id, content)
+
+friends(friend_id, user_id_sent, user_id_rec, date, status)
+status: sent, received
+
+tag_posts(id, post_id, friend_id)
+
+==========
+TAG FRIENDS 
+show address by lat & lon
+do everything without submit button
+get the storage of all the uploaded image
+notification work weblessons
+tag friends work -- done
+ajax drop down weblessons -- done

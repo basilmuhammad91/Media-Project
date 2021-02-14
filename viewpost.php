@@ -1,4 +1,7 @@
 <?php
+include('connect.php');
+$post_id=1;
+$query = mysqli_query($con, "
 SELECT posts.post_id, content,
 GROUP_CONCAT(files.file) AS file_link, 
 GROUP_CONCAT(files.image_lat) AS file_lat,

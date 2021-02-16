@@ -29,6 +29,7 @@ posts.post_id = post_category.post_id
 LEFT JOIN post_category_cde
 ON
 post_category_cde.category_id = post_category.category_id
+WHERE posts.post_id = '$post_id'
 	");
 $std=mysqli_fetch_array($query);
 echo "<pre>";
@@ -47,12 +48,11 @@ echo "</pre>";
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="src/css/coverflow.css">
+	<script type="text/javascript" src="src/js/coverflow.js"></script>
 
 </head>
 <body>
-
-<textarea><?php echo @$std['content']?></textarea>
-
 
 <div id="ajax"></div>
 <div class="container" style="width: 600px; margin: auto;">
@@ -66,7 +66,6 @@ echo "</pre>";
 		  	<div class="myImages">
 		  		<?php
 					$images = explode(",",$std['file_link']);
-
 					foreach($images as $image)
 					{
 					?>
@@ -116,7 +115,10 @@ echo "</pre>";
 		    <!-- ===========AUTO COMPLETE WORK======= -->
 	    	<br>
 			<div class="row pl-3">
-	  			<input type="date" value="<?php echo date_format(date_create($date),"Y-m-d");?>">
+				<?php
+				$date = explode(",",$std['file_date']);
+				?>
+	  			<input type="date" value="<?php echo date_format(date_create($date[0]),"Y-m-d");?>">
 		  	</div>
 	<br>
 			<div class="row">
@@ -126,12 +128,10 @@ echo "</pre>";
 			<br>
 		  	<div class="row">
 		  		<div id="map"></div>	
-		  	</div>
+		  	</div><br>
 		    <div class="row">
 		    	<label>Add Text</label>
-		    	<textarea name="content" class="form-control ml-2 mr-2">
-		    		
-		    	</textarea>
+		    	<input type="text" name="" value="<?php echo @$std['content']; ?>" class="form-control">
 		    </div>
 		    <br>
 		    <input type="submit" class="btn btn-primary" name='submit_image' value="Upload Image"/>
@@ -143,7 +143,13 @@ echo "</pre>";
 	</div>
 </div>
 <!-- ========================= -->
-
+<div id="coverflow">
+    
+    <div class="something_fancy"></div>
+    <img src="assets/DSCN0021.jpg" />
+	<img src="assets/DSCN0025.jpg" />    
+    <picture><source .. /></picture>
+</div>
 
 </body>
 </html>
@@ -205,7 +211,11 @@ function preview_image()
 </script>
 
 <script type="text/javascript">
-	var myCenter = new google.maps.LatLng(<?php echo $imgLocation['latitude']; ?>, <?php echo $imgLocation['longitude']; ?>);
+	<?php
+	$lat = explode(",",$std['file_lat']);
+	$long = explode(",",$std['file_long']);
+	?>
+	var myCenter = new google.maps.LatLng(<?php echo $lat[0]; ?>, <?php echo $long[0]; ?>);
 function initialize(){
     var mapProp = {
         center:myCenter,
@@ -254,4 +264,24 @@ google.maps.event.addDomListener(window, 'load', initialize);
     });
 
   });
+
+  // ============================================
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.ajax({
+			url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=AIzaSyCqsIfD59i4qphzF-6HopqmNQ3087-olJM',
+			success: function(result){
+				console.log(result);
+			}
+		});
+	});
+</script>
+<!-- ==================================== -->
+<script src="src/js/coverflow.min.js"></script>
+<script>
+    $(function() {
+		// and kick off
+        $('#coverflow').coverflow();
+    });
 </script>

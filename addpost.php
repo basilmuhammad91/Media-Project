@@ -117,7 +117,6 @@ if(isset($_POST['submit_image']))
 		  	<div id="wrapper">
 				  <input type="file" id="upload_file" name="upload_file[]" onchange="preview_image();" multiple/>
 				  
-				 </form>
 			 
 			</div>
 		  	
@@ -173,6 +172,12 @@ if(isset($_POST['submit_image']))
 		    <br>
 		    <input type="submit" class="btn btn-primary" name='submit_image' value="Upload Image"/>
 		  </div>
+
+<div id="div_controls">
+	
+
+</div>
+
 	  </form>
 	  <div class="card-footer text-muted">
 	    2 days ago
@@ -215,13 +220,15 @@ function preview_image()
 
 }
 
- $('#myform').on('submit',(function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
+ $('#upload_file').on("change", function(){
+ 	//$("#myform").submit();
+ 	// $("#myform").preventDefault();
+ 	var frm=document.getElementById('myform');
+        var formData = new FormData(frm);
 
         $.ajax({
             type:'POST',
-            url: $(this).attr('action'),
+            url: "upload.php",
             data:formData,
             cache:false,
             contentType: false,
@@ -229,16 +236,20 @@ function preview_image()
             success:function(data){
                 console.log("success");
                 console.log(data);
+var div=document.getElementById('div_controls');
+div.innerHTML="";
+var d=JSON.parse(data);
+// alert(d);
+               d.forEach(function(item){
+div.innerHTML+='<input type="text" name="Latitude[]" value="'+item.latitude+'"><br><input type="text" name="Longitude[]" value="'+item.longitude+'"><br><input type="text" name="Date[]" value="'+item.date+'"><br><input type="text" name="Size[]" value="'+item.size+'"><br><hr>';
+alert(item.latitude);
+               }); 	
             },
             error: function(data){
                 console.log("error");
                 console.log(data);
             }
         });
-    }));
-
- $('#upload_file').on("change", function(){
- 	$("#myform").submit();
  });
 
 </script>

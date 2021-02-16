@@ -1,0 +1,13 @@
+FETCH ALL IMAGES FROM SPECIFIC CATEGORIES
+================================================
+SELECT *, GROUP_CONCAT(files.file) AS file_link FROM post_category_cde
+INNER JOIN post_category
+ON 
+post_category.category_id = post_category_cde.category_id
+INNER JOIN posts
+ON
+posts.post_id = post_category.post_id
+LEFT JOIN files
+ON
+files.post_id = posts.post_id
+WHERE post_category_cde.category_id = 5

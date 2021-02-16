@@ -3,13 +3,16 @@ include('connect.php');
 $post_id=1;
 $query = mysqli_query($con, "
 SELECT posts.post_id, content,
-GROUP_CONCAT(files.file) AS file_link, 
-GROUP_CONCAT(files.image_lat) AS file_lat,
-GROUP_CONCAT(files.image_long) AS file_long,
-GROUP_CONCAT(files.date) AS file_date,
-GROUP_CONCAT(files.size) AS file_size,
-GROUP_CONCAT(users.name) AS user_name,
-GROUP_CONCAT(post_category_cde.description) AS category_name
+GROUP_CONCAT(DISTINCT files.file_id) AS file_id,
+GROUP_CONCAT(DISTINCT files.file) AS file_link, 
+GROUP_CONCAT(DISTINCT files.image_lat) AS file_lat,
+GROUP_CONCAT(DISTINCT files.image_long) AS file_long,
+GROUP_CONCAT(DISTINCT files.date) AS file_date,
+GROUP_CONCAT(DISTINCT files.size) AS file_size,
+GROUP_CONCAT(DISTINCT users.user_id) AS user_id,
+GROUP_CONCAT(DISTINCT users.name) AS user_name,
+GROUP_CONCAT(DISTINCT post_category.category_id) AS category_id,
+GROUP_CONCAT(DISTINCT post_category_cde.description) AS category_name
 FROM posts 
 LEFT JOIN files 
 ON 
@@ -47,7 +50,10 @@ echo "</pre>";
 
 </head>
 <body>
-	
+
+<textarea><?php echo @$std['content']?></textarea>
+
+
 <div id="ajax"></div>
 <div class="container" style="width: 600px; margin: auto;">
 	<div class="card text-center">
@@ -57,7 +63,18 @@ echo "</pre>";
 	  <form id="myform" action="#" method="post" enctype="multipart/form-data">
 		  <div class="card-body" style="margin: auto !important; width: fit-content">
 		  	<div id="image_preview" style="margin: auto;"></div><br><br>
-		  	<img src="">
+		  	<div class="myImages">
+		  		<?php
+					$images = explode(",",$std['file_link']);
+
+					foreach($images as $image)
+					{
+					?>
+					<img src="<?php echo "assets/".$image ?>">
+					<?php
+					}
+				?>
+		  	</div>
 		  </div><br>
 		  <div class="card-body">
 		  	<div id="wrapper">

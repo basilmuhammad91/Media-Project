@@ -59,11 +59,30 @@ if(isset($_POST['submit_image']))
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tokenfield/0.12.0/css/bootstrap-tokenfield.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+	<link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 
 </head>
 <body>
 	
-<div id="ajax"></div>
+<!-- ============NOTIFICATION WORK START============= -->
+<div class="header">
+	 <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+     <div class="navbar-header">
+      <a class="navbar-brand" href="#">YOUR NOTIFICATION</a>
+     </div>
+     <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count" style="border-radius:10px;"></span> <span class="glyphicon glyphicon-envelope" style="font-size:18px;"></span></a>
+       <ul class="dropdown-menu"></ul>
+      </li>
+     </ul>
+    </div>
+   </nav>
+</div>
+<!-- ============NOTFICATION WORK END============= -->
 <div class="container" style="width: 600px; margin: auto;">
 	<div class="card text-center">
 	  <div class="card-header">
@@ -110,14 +129,16 @@ if(isset($_POST['submit_image']))
 <span id="name"></span>
 
 		    <!-- ===========AUTO COMPLETE WORK======= -->
-	    	<br>
+	    	<!-- <br>
 			<div class="row pl-3">
 	  			<input type="date" value="<?php echo date_format(date_create($date),"Y-m-d");?>">
-		  	</div>
+		  	</div> -->
+		  	<div id="div_controls">
 	<br>
 			<div class="row">
 				<label>Location</label>
 				<input type="text" name="" class="form-control">
+
 			</div>
 			<br>
 		  	<div class="row">
@@ -133,7 +154,7 @@ if(isset($_POST['submit_image']))
 		    <input type="submit" class="btn btn-primary" name='submit_image' value="Upload Image"/>
 		  </div>
 
-<div id="div_controls">
+
 	
 
 </div>
@@ -201,8 +222,7 @@ div.innerHTML="";
 var d=JSON.parse(data);
 // alert(d);
                d.forEach(function(item){
-div.innerHTML+='<input type="text" name="Latitude[]" value="'+item.latitude+'"><br><input type="text" name="Longitude[]" value="'+item.longitude+'"><br><input type="text" name="Date[]" value="'+item.date+'"><br><input type="text" name="Size[]" value="'+item.size+'"><br><hr>';
-alert(item.latitude);
+div.innerHTML+='<input class="form-control" type="text" name="Latitude[]" value="'+item.latitude+'"><br><input class="form-control" type="text" name="Longitude[]" value="'+item.longitude+'"><br><input class="form-control" type="text" name="Date[]" value="'+item.date+'"><br><input class="form-control" type="text" name="Size[]" value="'+item.size+'"><br><hr>';
                }); 	
             },
             error: function(data){
@@ -262,6 +282,22 @@ google.maps.event.addDomListener(window, 'load', initialize);
     $('#search').click(function(){
         $('#name').text($('#search_data').val());
     });
+
+    // ============NOTIFICATION WORK============
+
+$.ajax({
+   url:"fetchnoti.php",
+   data:{view:view},
+   dataType:"json",
+   success:function(data)
+   {
+    $('.dropdown-menu').html(data.notification);
+    if(data.unseen_notification > 0)
+    {
+     $('.count').html(data.unseen_notification);
+    }
+   }
+  });
 
   });
 </script>
